@@ -40,7 +40,7 @@ pip install scanpy anndata pandas numpy scipy scikit-learn h5py leidenalg umap-l
 | `loss.py` | Defines ZINB/NB reconstruction losses and contrastive loss. |
 | `train.py` | Contains model training and clustering optimization. |
 | `utils.py` | Contains data loading, preprocessing, graph construction, clustering initialization, and visualization functions. |
-| `run_DGC-MSA.py` | Main script for running the model. |
+| `run_DGC_MSA.py` | Main script for running the model. |
 | `preprocessing_h5.py` | Converts `.h5` datasets into `.h5ad` files. |
 | `preprocessing_baron.py` | Converts Baron pancreas datasets into `.h5ad` files. |
 
@@ -75,19 +75,19 @@ adata.obs["celltype"]
 Run the model with:
 
 ```bash
-python run_DGC-MSA.py --name Muraro --celltype known
+python run_DGC_MSA.py --name Muraro --celltype known
 ```
 
 Run on GPU:
 
 ```bash
-python run_DGC-MSA.py --name Muraro --celltype known --cuda True
+python run_DGC_MSA.py --name Muraro --celltype known --cuda True
 ```
 
 If true cell labels are unavailable:
 
 ```bash
-python run_DGC-MSA.py --name Muraro --celltype unknown
+python run_DGC_MSA.py --name Muraro --celltype unknown
 ```
 
 ## Main Arguments
