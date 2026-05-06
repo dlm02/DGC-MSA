@@ -14,7 +14,7 @@ import utils
 import scipy
 import scipy.sparse
 
-from model import AttentionAE
+from model import DGC_MSA
 from train import train, clustering, loss_func
 from sklearn.metrics import silhouette_score, adjusted_rand_score, normalized_mutual_info_score, davies_bouldin_score
 if __name__ == "__main__":
@@ -113,7 +113,7 @@ if __name__ == "__main__":
         args.n_input = dataset.shape[1]  # 设置模型输入维度为基因数量（数据集的列数）,行是细胞,列是基因
         print(args)             # 打印参数配置
         # 初始化注意力自编码器模型，参数包括中间层维度（256,64,64,256）、输入维度、潜在维度、注意力头数、设备
-        init_model = AttentionAE(256, 64, 64, 256, n_input=args.n_input, n_z=args.n_z, heads=args.n_heads, device=device)
+        init_model = DGC_MSA(256, 64, 64, 256, n_input=args.n_input, n_z=args.n_z, heads=args.n_heads, device=device)
         # 预训练模型：调用train函数，输入初始模型、标准化数据、原始数据、邻接矩阵、大小因子、设备和参数，返回预训练模型
         pretrain_model, _ = train(init_model, Zscore_data, rawData, adj, r_adj, size_factor, device, args)
         # 聚类阶段：调用clustering函数，输入预训练模型、数据、真实标签、邻接矩阵等，返回评估指标、预测标签、模型等
@@ -195,7 +195,7 @@ if __name__ == "__main__":
         args.n_input = dataset.shape[1]  # 设置模型输入维度为基因数量
         print(args)   # 打印参数配置
         # 初始化注意力自编码器模型（同前）
-        init_model = AttentionAE(256, 64, 64, 256, n_input=args.n_input, n_z=args.n_z, heads=args.n_heads,device=device)
+        init_model = DGC_MSA(256, 64, 64, 256, n_input=args.n_input, n_z=args.n_z, heads=args.n_heads,device=device)
         # 用下采样数据预训练模型，返回预训练模型和训练时间
         pretrain_model, train_elapsed_time  = train(init_model, new_Zscore_data, new_rawData,
                                                     new_adj, new_r_adj, size_factor, device, args)
@@ -203,7 +203,7 @@ if __name__ == "__main__":
         _, _, cluster_layer, model, _ = clustering(pretrain_model, new_Zscore_data, new_rawData, 
                                                    new_celltype, new_adj, new_r_adj, size_factor, device, args)
         # 创建一个在CPU上的模型副本（用于全量数据推理，避免GPU内存不足）
-        copy_model = AttentionAE(256, 64, 64, 256, n_input=args.n_input, n_z=args.n_z, heads=args.n_heads, device=torch.device('cpu'))
+        copy_model = DGC_MSA(256, 64, 64, 256, n_input=args.n_input, n_z=args.n_z, heads=args.n_heads, device=torch.device('cpu'))
         copy_model.load_state_dict(model.state_dict())  # 加载训练好的模型参数
         # 将全量标准化数据转换为CPU上的张量（因副本模型在CPU）
         data = torch.Tensor(Zscore_data).cpu()
