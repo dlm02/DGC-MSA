@@ -1,21 +1,5 @@
 # -*- coding: utf-8 -*-
-"""
-Modified model file: adds optional Transformer-based fusion module and a more flexible
-multi-head attention that supports arbitrary batch sizes.
-
-Save as model_transformer.py and either import AttentionAE from this file or replace
-original model.py with this content.
-
-Added features:
-- TransformerFusion: a lightweight TransformerEncoder-based fusion block.
-- PositionalEncoding: sinusoidal positional encoding to stabilize Transformer.
-- AttentionWide_v2: corrected to work with arbitrary batch sizes and variable sequence lengths.
-- AttentionAE: new parameter `use_transformer` and `transformer_layers` to enable Transformer fusion.
-
-This file keeps the original API: AttentionAE(...).forward(data, adj) returns
-(z, A_pred, pi, mean, disp)
-
-"""
+# DGC-MSA: Dual-View Graph Contrastive Clustering via Multi-Scale Attention
 
 import torch
 import torch.nn as nn
@@ -184,11 +168,11 @@ class AttentionWide(nn.Module):
 
         return output
 # Final model
-class AttentionAE(nn.Module):
+class DGC_MSA(nn.Module):
     def __init__(self, n_enc_1, n_enc_2, n_dec_1, n_dec_2,
                  n_input, n_z, heads, device, use_multiscale_gnn=True,
                  gnn_scales=[1, 2, 3]):
-        super(AttentionAE, self).__init__()
+        super(DGC_MSA, self).__init__()
         self.use_multiscale_gnn = use_multiscale_gnn
         self.gnn_scales = gnn_scales
         self.Gnoise = GaussianNoise(sigma=0.1, device=device)
