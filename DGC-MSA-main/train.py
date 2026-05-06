@@ -18,7 +18,6 @@ import scipy.sparse
 
 random.seed(1)
 
-  # 它的作用是训练 AttentionAE 模型，同时优化输入数据的重构（通过 ZINB 损失） 和图结构的重构（通过 MSE 损失）
 def train(init_model, Zscore_data, rawData, adj, r_adj, size_factor, device, args):
     # 定义训练函数，参数包括：初始模型、标准化数据、原始数据、邻接矩阵、重构目标邻接矩阵、size factor
     # 记录训练开始时间
